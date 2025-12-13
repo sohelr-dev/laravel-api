@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $product=Product::select('*')->get();
+        return response()->json([
+            'product'=>$product,
+            'success'=>true
+        ]);
     }
 
     /**
@@ -30,19 +35,19 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        if($request->file('photo')){
-            $productName = time().'.'.$request->photo->extension();
+        // if($request->file('photo')){
+        //     $productName = time().'.'.$request->photo->extension();
 
-            // Save the image to public/images/products
-            $request->photo->move(public_path('images/products'), $productName);
+        //     // Save the image to public/images/products
+        //     $request->photo->move(public_path('images/products'), $productName);
 
-            // Save correct path to DB
-            $request->merge([
-                'photo' => 'images/products/' . $productName
-            ]);
+        //     // Save correct path to DB
+        //     $request->merge([
+        //         'photo' => 'images/products/' . $productName
+        //     ]);
 
-            return $request->all(); // Return all data including photo path
-        }
+        //     // return $request->all(); // Return all data including photo path
+        // }
 
         if($request->file('photo')){
             $productName = time().'.'.$request->photo->extension();
@@ -52,19 +57,17 @@ class ProductController extends Controller
                 'photo'=>'images/products/'.$productName
             ]);
             // return $request->input('photo');
-            // return $request->all();
         };
-
 
         $product=DB::table('products')->insertGetId([
                 'name' => $request->name,
-                'price' => $request->price,
-                'category_id' => $request->price,
-                'quantity' => $request->quantity,
+                // 'price' => $request->price,
+                // 'category_id' => $request->price,
+                // 'quantity' => $request->quantity,
                 'photo' => $request->input('photo'),
-                'discount' => $request->discount ?? 0,
-                'created_at' => now(),
-                'updated_at' => now()
+                // 'discount' => $request->discount ?? 0,
+                // 'created_at' => now(),
+                // 'updated_at' => now()
             ]);
         
         if($product){
