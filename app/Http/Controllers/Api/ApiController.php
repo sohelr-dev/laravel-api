@@ -48,13 +48,13 @@ class ApiController extends Controller
             }else{
                 return response()->json([
                     'error' => true,
-                    'message' => 'Password does not match'
+                    'password' => 'Password does not match'
                 ], 401);
             }
         }else{
             return response()->json([
                 'error' => true,
-                'message' => 'Email does not exist'
+                'email' => 'Email does not exist'
             ], 401);
         }
     }
